@@ -201,27 +201,6 @@ for (j in 1:length(septm_data)) {
           write.table(ratio_table, "tki_treated_ubi_ratio_table_08-09-16.txt", sep="\t", row.names = FALSE)
       }
 }
-test1=cbind(ratio_table_phos$H4006.log2ratio,ratio_table_phos$HCC827.log2ratio,ratio_table_phos$PC9.log2ratio, checkmeout$incc2, ratio_table_phos$'#increased_2fold_erlo',checkmeout$decc2, ratio_table_phos$`#decreased_2fold_erlo` ,checkmeout$incc1.5, ratio_table_phos$`#increased_1.5fold_erlo`,
-            checkmeout$decc1.5,ratio_table_phos$`#decreased_1.5fold_erlo` )
-checkmeout<-genaddform(ratio_table_phos,erlo_ratio_names,c("incc1.5","decc1.5","incc2","decc2"),c('1.5i','1.5d','2i','2d'))
-
-
-ratio_table_phos=genaddform(ratio_table_phos,erlo_ratio_names,c("#increased_1.5fold_erlo","#decreased_1.5fold_erlo","#increased_2fold_erlo","#decreased_2fold_erlo"),c('1.5i','1.5d','2i','2d'))
-ratio_table_phos=genaddform(ratio_table_phos,crizo_ratio_names,c("#increased_1.5fold_crizo","#decreased_1.5fold_crizo","#increased_2fold_crizo","#decreased_2fold_crizo"),c('1.5i','1.5d','2i','2d'))
-ratio_table_phos=genaddform(ratio_table_phos,dasa_ratio_names,c("#increased_1.5fold_dasa","#decreased_1.5fold_dasa","#increased_2fold_dasa","#decreased_2fold_dasa"),c('1.5i','1.5d','2i','2d'))
-ratio_table_phos=genaddform(ratio_table_phos,afa_ratio_names,c("#increased_1.5fold_afa","#decreased_1.5fold_afa","#increased_2fold_afa","#decreased_2fold_afa"),c('1.5i','1.5d','2i','2d'))
-
-ratio_table_ubi=genaddform(ratio_table_ubi,erlo_ratio_names,c("#increased_1.5fold_erlo","#decreased_1.5fold_erlo","#increased_2fold_erlo","#decreased_2fold_erlo"),c('1.5i','1.5d','2i','2d'))
-ratio_table_ubi=genaddform(ratio_table_ubi,crizo_ratio_names,c("#increased_1.5fold_crizo","#decreased_1.5fold_crizo","#increased_2fold_crizo","#decreased_2fold_crizo"),c('1.5i','1.5d','2i','2d'))
-ratio_table_ubi=genaddform(ratio_table_ubi,dasa_ratio_names,c("#increased_1.5fold_dasa","#decreased_1.5fold_dasa","#increased_2fold_dasa","#decreased_2fold_dasa"),c('1.5i','1.5d','2i','2d'))
-ratio_table_ubi=genaddform(ratio_table_ubi,afa_ratio_names,c("#increased_1.5fold_afa","#decreased_1.5fold_afa","#increased_2fold_afa","#decreased_2fold_afa"),c('1.5i','1.5d','2i','2d'))
-
-ratio_table_acetyl=genaddform(ratio_table_acetyl,erlo_ratio_names,c("#increased_1.5fold_erlo","#decreased_1.5fold_erlo","#increased_2fold_erlo","#decreased_2fold_erlo"),c('1.5i','1.5d','2i','2d'))
-ratio_table_acetyl=genaddform(ratio_table_acetyl,crizo_ratio_names,c("#increased_1.5fold_crizo","#decreased_1.5fold_crizo","#increased_2fold_crizo","#decreased_2fold_crizo"),c('1.5i','1.5d','2i','2d'))
-ratio_table_acetyl=genaddform(ratio_table_acetyl,dasa_ratio_names,c("#increased_1.5fold_dasa","#decreased_1.5fold_dasa","#increased_2fold_dasa","#decreased_2fold_dasa"),c('1.5i','1.5d','2i','2d'))
-ratio_table_acetyl=genaddform(ratio_table_acetyl,afa_ratio_names,c("#increased_1.5fold_afa","#decreased_1.5fold_afa","#increased_2fold_afa","#decreased_2fold_afa"),c('1.5i','1.5d','2i','2d'))
-
-
 
 # 
 # 
@@ -233,13 +212,22 @@ ratio_table_ubi = read.delim("tki_treated_ubi_ratio_table_08-09-16.txt", header 
 uniprot_entries = read.delim("uniprot_reviewed_human_refproteome_08-24-15.txt", header=T, stringsAsFactors = FALSE)
 
 
-#Testing for accuracy---------
-checkmeout<-genaddform(ratio_table_phos,erlo_ratio_names,c("incc1.5","decc1.5","incc2","decc2","ratios"),c('1.5i','1.5d','2i','2d','!na.is'))
+#Testing for accuracy--------------------------------
 
-test1=cbind(ratio_table_phos$H4006.log2ratio,ratio_table_phos$HCC827.log2ratio,ratio_table_phos$PC9.log2ratio, checkmeout$incc2, ratio_table_phos$'#increased_2fold_erlo',checkmeout$decc2, ratio_table_phos$`#decreased_2fold_erlo` ,checkmeout$incc1.5, ratio_table_phos$`#increased_1.5fold_erlo`,
-           checkmeout$decc1.5,ratio_table_phos$`#decreased_1.5fold_erlo`, checkmeout$ratios , ratio_table_phos$`#erlo_ratios`)
+#test1 views the data from erlo_ratio_names and compares the data generated from the original lines of code to the data generated from the function genaddform.
 
-#--------------------------
+#checkmeout<-genaddform(ratio_table_phos,erlo_ratio_names,c("incc1.5","decc1.5","incc2","decc2","ratios"),c('1.5i','1.5d','2i','2d','!na.is'))
+
+# ratio_table_phos[, "#increased_1.5fold_erlo"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(na.omit(x) > log2(1.5))})
+# ratio_table_phos[, "#decreased_1.5fold_erlo"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(na.omit(x) < log2(0.667))})
+# ratio_table_phos[, "#increased_2fold_erlo"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(na.omit(x) > 1)})
+# ratio_table_phos[, "#decreased_2fold_erlo"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(na.omit(x) < -1)})
+# ratio_table_phos[, "#erlo_ratios"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
+
+#test1=cbind(ratio_table_phos$H4006.log2ratio,ratio_table_phos$HCC827.log2ratio,ratio_table_phos$PC9.log2ratio, checkmeout$incc2, ratio_table_phos$'#increased_2fold_erlo',checkmeout$decc2, ratio_table_phos$`#decreased_2fold_erlo` ,checkmeout$incc1.5, ratio_table_phos$`#increased_1.5fold_erlo`,
+#           checkmeout$decc1.5,ratio_table_phos$`#decreased_1.5fold_erlo`, checkmeout$ratios , ratio_table_phos$`#erlo_ratios`)
+
+#----------------------------------------------------
 
 ratio_table_phos=genaddform(ratio_table_phos,erlo_ratio_names,c("#increased_1.5fold_erlo","#decreased_1.5fold_erlo","#increased_2fold_erlo","#decreased_2fold_erlo", "#erlo_ratios"),c('1.5i','1.5d','2i','2d','!na.is'))
 ratio_table_phos=genaddform(ratio_table_phos,crizo_ratio_names,c("#increased_1.5fold_crizo","#decreased_1.5fold_crizo","#increased_2fold_crizo","#decreased_2fold_crizo", "#crizo_ratios"),c('1.5i','1.5d','2i','2d','!na.is'))
@@ -318,22 +306,22 @@ ratio_table_acetyl=genaddform(ratio_table_acetyl,afa_ratio_names,c("#increased_1
 
 
 
-ratio_table_acetyl[, "#erlo_ratios"] = apply(ratio_table_acetyl[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_acetyl[, "#crizo_ratios"] = apply(ratio_table_acetyl[, crizo_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_acetyl[, "#dasa_ratios"] = apply(ratio_table_acetyl[, dasa_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_acetyl[, "#afa_ratios"] = sapply(ratio_table_acetyl[, afa_ratio_names], function(x){sum(!is.na(x))})
+# ratio_table_acetyl[, "#erlo_ratios"] = apply(ratio_table_acetyl[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_acetyl[, "#crizo_ratios"] = apply(ratio_table_acetyl[, crizo_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_acetyl[, "#dasa_ratios"] = apply(ratio_table_acetyl[, dasa_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_acetyl[, "#afa_ratios"] = sapply(ratio_table_acetyl[, afa_ratio_names], function(x){sum(!is.na(x))})
+# 
+# ratio_table_phos[, "#erlo_ratios"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_phos[, "#crizo_ratios"] = apply(ratio_table_phos[, crizo_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_phos[, "#dasa_ratios"] = apply(ratio_table_phos[, dasa_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_phos[, "#afa_ratios"] = sapply(ratio_table_phos[, afa_ratio_names], function(x){sum(!is.na(x))})
+# 
+# ratio_table_ubi[, "#erlo_ratios"] = apply(ratio_table_ubi[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_ubi[, "#crizo_ratios"] = apply(ratio_table_ubi[, crizo_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_ubi[, "#dasa_ratios"] = apply(ratio_table_ubi[, dasa_ratio_names], 1, function(x){sum(!is.na(x))})
+# ratio_table_ubi[, "#afa_ratios"] = sapply(ratio_table_ubi[, afa_ratio_names], function(x){sum(!is.na(x))})
 
-ratio_table_phos[, "#erlo_ratios"] = apply(ratio_table_phos[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_phos[, "#crizo_ratios"] = apply(ratio_table_phos[, crizo_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_phos[, "#dasa_ratios"] = apply(ratio_table_phos[, dasa_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_phos[, "#afa_ratios"] = sapply(ratio_table_phos[, afa_ratio_names], function(x){sum(!is.na(x))})
-
-ratio_table_ubi[, "#erlo_ratios"] = apply(ratio_table_ubi[, erlo_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_ubi[, "#crizo_ratios"] = apply(ratio_table_ubi[, crizo_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_ubi[, "#dasa_ratios"] = apply(ratio_table_ubi[, dasa_ratio_names], 1, function(x){sum(!is.na(x))})
-ratio_table_ubi[, "#afa_ratios"] = sapply(ratio_table_ubi[, afa_ratio_names], function(x){sum(!is.na(x))})
-
-
-# write.table(ratio_table_acetyl, "output/ratio_table_acetyl_08-09-16.txt", sep="\t", row.names=F)
-# write.table(ratio_table_phos, "output/ratio_table_phos_08-09-16.txt", sep="\t", row.names=F)
-# write.table(ratio_table_ubi, "output/ratio_table_ubi_08-09-16.txt", sep="\t", row.names=F)
+# 
+#  write.table(ratio_table_acetyl, "output/ratio_table_acetyl_08-09-16.txt", sep="\t", row.names=F)
+#  write.table(ratio_table_phos, "output/ratio_table_phos_08-09-16.txt", sep="\t", row.names=F)
+#  write.table(ratio_table_ubi, "output/ratio_table_ubi_08-09-16.txt", sep="\t", row.names=F)
